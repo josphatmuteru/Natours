@@ -5,6 +5,7 @@ const rateLimit = require('express-rate-limit');
 // const helmet = require('helmet')
 // const mongoSanitize = require('express-mongo-sanitize');
 // const xss = require('xss-clean');
+// const hpp = require('hpp')
 
 const globalErrorHandler = require('./controllers/errorController');
 const app = express();
@@ -39,6 +40,20 @@ app.use(mongoSanitize());
 //Data sanitization against XSS
 // npm i npm xss-clean
 app.use(xss());
+
+//Prevent parameter pollution
+// npm i hpp
+app.use(
+  hpp({
+    whitelist: [
+      'duration',
+      'ratingsQuantity',
+      'maxGroupSize',
+      'difficulty',
+      'price',
+    ],
+  })
+);
 
 // app.use((req, res, next) => {
 //   console.log('Hello from the middleware 👋');
