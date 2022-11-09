@@ -3,7 +3,7 @@ const catchAsync = require('../utils/catchAsync');
 const User = require('../models/userModel');
 const Tour = require('../models/tourModel');
 const Review = require('../models/reviewModel');
-
+const factory = require('../controllers/handlerFactory');
 exports.createReview = catchAsync(async (req, res, next) => {
   // Allow nested routes
   if (!req.body.tour) req.body.tour = req.params.tourId;
@@ -26,3 +26,5 @@ exports.getAllReviews = catchAsync(async (req, res, next) => {
     data: review,
   });
 });
+
+exports.deleteReview = factory.deleteOne(Review);
