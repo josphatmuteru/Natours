@@ -1,8 +1,6 @@
-// review / rating / createdAt / ref to tour / ref to user
+const mongoose = require('mongoose');
 
-const { mongoose } = require('mongoose');
-
-const reviewSchema = new mongoose.schema(
+const reviewSchema = new mongoose.Schema(
   {
     review: {
       type: String,
@@ -14,14 +12,18 @@ const reviewSchema = new mongoose.schema(
       max: 5,
       required: [true, 'A review must have a rating'],
     },
-    createdAt: { Date, default: Date.now() },
+    createdAt: {
+      type: Date,
+      default: Date.now(),
+    },
     tour: {
-      type: mongoose.schema.ObjectId,
+      type: mongoose.Schema.ObjectId,
       ref: 'Tour',
+      // : [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
       required: [true, 'Review must belong to a tour'],
     },
     user: {
-      type: mongoose.schema.ObjectId,
+      type: mongoose.Schema.ObjectId,
       ref: 'User',
       required: [true, 'Review must belong to a user'],
     },
@@ -32,5 +34,12 @@ const reviewSchema = new mongoose.schema(
   }
 );
 
-const Review = mongoose.model('Review', reviewSchema);
-module.exports = Review;
+reviewSchema.pre(/^find/, function (next) {
+  this.populate(['user', 'tour']);
+  next();
+});
+
+// const Review = mongoose.model('Review', reviewSchema);
+// module.exports = Review;
+module.exports =
+  mongoose.models.Review || mongoose.model('Review', reviewSchema);
