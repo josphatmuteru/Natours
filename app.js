@@ -7,6 +7,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const cookieParser = require('cookie-parser');
 
 const globalErrorHandler = require('./controllers/errorController');
 const userRouter = require('./routes/userRoutes');
@@ -24,7 +25,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //Set security HTTP headers
 // npm i helmet
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      useDefaults: true,
+      directives: {
+        'script-src': ["'self'", 'https://cdnjs.cloudflare.com/'],
+      },
+    },
+  })
+);
 
 //Development logging
 if (process.env.NODE_ENV === 'development') {
@@ -41,6 +51,7 @@ app.use('/api', limiter);
 
 //Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
+app.use(cookieParser());
 
 //Data sanitization against NoSQL query injection
 // npm i express-mongo-sanitize
@@ -72,7 +83,7 @@ app.use(
 //Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
-  // console.log(req.headers);
+  console.log(req.cookies);
   next();
 });
 
