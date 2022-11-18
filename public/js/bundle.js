@@ -8691,7 +8691,7 @@ var _login = require("./login");
 var _mapbox = require("./mapbox");
 // //DOM
 var mapBox = document.getElementById('map');
-var loginForm = document.querySelector('.form');
+var loginForm = document.querySelector('.form--form');
 var logOutBtn = document.querySelector('.nav__el--logout');
 
 // DELEGATION;
