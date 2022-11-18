@@ -1,4 +1,3 @@
-const express = require('express');
 const AppError = require('./../utils/appError');
 
 const handleCastErrorDB = (err) => {
@@ -25,8 +24,9 @@ const handleJWTError = () =>
 const handleJWTExpiredError = () =>
   new AppError('Your token has expired! Please login again', 401);
 
-const sendErrorDev = (err, req, res, next) => {
+const sendErrorDev = (err, req, res) => {
   //A) API;
+
   if (req.originalUrl.startsWith('/api')) {
     return res.status(err.statusCode).json({
       status: err.status,
@@ -45,7 +45,7 @@ const sendErrorDev = (err, req, res, next) => {
 };
 
 const sendErrorProd = (err, req, res) => {
-  //A) API
+  // //A) API
   if (req.originalUrl.startsWith('/api')) {
     // Operational, trusted error: send message to client
     if (err.isOperational) {
@@ -56,7 +56,6 @@ const sendErrorProd = (err, req, res) => {
     }
     //1. Log error
     console.error('ERROR :/', err);
-
     //2) Send generic message
     return res.status(500).json({
       status: 'error',
@@ -75,7 +74,7 @@ module.exports = (err, req, res, next) => {
   err.status = err.status || 'error';
 
   if (process.env.NODE_ENV === 'development') {
-    sendErrorDev(err, res);
+    sendErrorDev(err, req, res);
   } else if (process.env.NODE_ENV === 'production') {
     let error = { ...err };
     error.message = err.message;
