@@ -15,8 +15,9 @@ const tourRouter = require('./routes/tourRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
 const viewRouter = require('./routes/viewRoutes');
 const bookingRouter = require('./routes/bookingRoutes');
-
+const cors = require('cors');
 const app = express();
+app.use(cors());
 
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
@@ -25,14 +26,34 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 //Set security HTTP headers
+// CORS configuration
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+  next();
+});
+
 // npm i helmet
 app.use(
   helmet({
+    crossOriginEmbedderPolicy: 'unsafe-inline',
+    crossOriginResourcePolicy: {
+      allowOrigins: ['*'],
+    },
     contentSecurityPolicy: {
       useDefaults: true,
       directives: {
-        // scriptSrc: ["'self'", 'https://cdnjs.cloudflare.com/'],
-        scriptSrc: ["'self'", 'https://cdnjs.cloudflare.com/'],
+        defaultSrc: ['*'],
+        scriptSrc: [
+          // "'self'",
+          // 'https://cdnjs.cloudflare.com/',
+          // 'https://js.stripe.com',
+          // "'unsafe-inline'",
+          "* data: 'unsafe-eval' unsafe-inline blob:",
+        ],
       },
     },
   })
@@ -112,7 +133,10 @@ app.all('*', (req, res, next) => {
 
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
-
+app.use((req, res, next) => {
+  res.setHeader('Cross-Origin-Resource-Policy', 'same-site');
+  next();
+});
 app.use(globalErrorHandler);
 
 // 4. START SERVER
