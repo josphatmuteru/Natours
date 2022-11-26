@@ -39,10 +39,10 @@ app.use(function (req, res, next) {
 // npm i helmet
 app.use(
   helmet({
-    crossOriginEmbedderPolicy: 'unsafe-inline',
-    crossOriginResourcePolicy: {
-      allowOrigins: ['*'],
-    },
+    // crossOriginEmbedderPolicy: 'unsafe-inline',
+    // crossOriginResourcePolicy: {
+    //   allowOrigins: ['*'],
+    // },
     contentSecurityPolicy: {
       useDefaults: true,
       directives: {
@@ -134,7 +134,7 @@ app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 app.use((req, res, next) => {
-  res.setHeader('Cross-Origin-Resource-Policy', 'same-site');
+  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
   next();
 });
 app.use(globalErrorHandler);
