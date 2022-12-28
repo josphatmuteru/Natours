@@ -23,7 +23,7 @@ if (signUpForm) {
     const password = document.getElementById('password').value;
     const passwordConfirm = document.getElementById('confirm-password').value;
 
-    data = { name, email, password, passwordConfirm };
+    const data = { name, email, password, passwordConfirm };
     signUp(data);
   });
 }

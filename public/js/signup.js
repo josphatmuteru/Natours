@@ -1,4 +1,4 @@
-import { axios } from 'axios';
+import axios from 'axios';
 import { showAlert } from './alerts';
 import { login } from './login';
 
@@ -17,6 +17,6 @@ export const signUp = async (data) => {
     const password = data.password;
     login(email, password);
   } catch (err) {
-    showAlert('error', 'Error creating your account. Please try again later');
+    console.log(err);
   }
 };
