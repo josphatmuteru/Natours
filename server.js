@@ -16,6 +16,11 @@ const DB = process.env.DATABASE.replace(
 );
 
 // const DB =  'mongodb+srv://Josphat:2UrHBrLjiuO2UI5h@cluster0.m0kdoqh.mongodb.net';
+const port = process.env.PORT || 3000;
+const startServer = () =>
+  app.listen(port, () => {
+    console.log(`App running on port ${port}`);
+  });
 
 mongoose
   // .connect(process.env.DATABASE_LOCAL, {
@@ -24,13 +29,12 @@ mongoose
     useCreateIndex: true,
     useFindAndModify: false,
   })
-  .then((con) => console.log('DB connection successful'));
+  .then((con) => {
+    console.log('DB connection successful');
+    startServer();
+  });
 
 // console.log(process.env);
-const port = process.env.PORT || 3000;
-const server = app.listen(port, () => {
-  console.log(`App running on port ${port}`);
-});
 
 process.on('unhandledRejection', (err) => {
   console.log(err.name, err.message);
