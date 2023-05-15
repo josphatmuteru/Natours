@@ -1,6 +1,6 @@
 const express = require('express');
 const AppError = require('../utils/appError');
-const User = require('./../models/UserModel');
+const User = require('./../models/userModel');
 const catchAsync = require('./../utils/catchAsync');
 const factory = require('../controllers/handlerFactory');
 const multer = require('multer');
