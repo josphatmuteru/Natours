@@ -15,12 +15,11 @@ const DB = process.env.DATABASE.replace(
   process.env.DATABASE_PASSWORD
 );
 
-// const DB =
-//   'mongodb+srv://Josphat:2UrHBrLjiuO2UI5h@cluster0.m0kdoqh.mongodb.net';
+// const DB =  'mongodb+srv://Josphat:2UrHBrLjiuO2UI5h@cluster0.m0kdoqh.mongodb.net';
 
 mongoose
-  .connect(process.env.DATABASE_LOCAL, {
-    // .connect(DB, {
+  // .connect(process.env.DATABASE_LOCAL, {
+  .connect(DB, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
